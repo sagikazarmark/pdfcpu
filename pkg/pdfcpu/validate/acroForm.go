@@ -186,6 +186,15 @@ func validateAcroFieldDictEntries(xRefTable *pdf.XRefTable, d pdf.Dict, terminal
 
 func validateAcroFieldDict(xRefTable *pdf.XRefTable, ir pdf.IndirectRef, inFieldType *pdf.Name) error {
 
+	dd, err := xRefTable.Dereference(ir)
+	if err != nil || dd == nil {
+		return err
+	}
+
+	if _, ok := dd.(pdf.XRefStreamDict); ok {
+		return nil
+	}
+
 	d, err := xRefTable.DereferenceDict(ir)
 	if err != nil || d == nil {
 		return err
